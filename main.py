@@ -1,43 +1,50 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup
+import tkinter.ttk
+from tkinter import *
+from tkinter.ttk import *
 import re
 import time
 import Server as S
+import Functions as F
+
+def Stop(event =None):
+    window.quit()
+Command_List = []
 
 
+window = Tk()
+window.title("Script_2 Program")
+window.geometry("400x300+500+200")
+window.resizable(False, False)
+
+# 버튼
+button1 = Button(text=" Google_Help ", command=F._1_GooGle(), takefocus=False )
+button2 = Button(text=" MultiSearch ", command=F._2_MultiMap(), takefocus=False )
+button3 = Button(text=" Timer_Alram ", command=F._3_TimerAlram(), takefocus=False )
+
+button1.place(x=300, y=30)
+button2.place(x=300, y=80)
+button3.place(x=300, y=130)
+
+# 사진 출력
+tk_image = F.Make_fight_image(S.image)
+Label(window, image=tk_image).pack(side=LEFT)
+
+# 메뉴
+menu = Menu()
+menu_file = Menu(menu, tearoff=False)  # True일경우 메뉴분리
+menu_url  = Menu(menu, tearoff=False)
+menu_file.add_command(label='ChangeImage', command=F.open_file, accelerator='Ctrl+o')
+menu_url.add_command(label='ChangeUrl', command=F.Change_Url, accelerator='Ctrl+U')
+
+menu.add_cascade(label='File', menu = menu_file )
+menu.add_cascade(label='Url', menu = menu_url )
+
+window.config(menu=menu)
+# 키 설정
+window.bind("<Escape>", Stop)
+window.bind("<Control-o>", F.open_file)
+window.bind("<Control-u>", F.Change_Url)
 
 
-
-
-'''
-browser = webdriver.Chrome()
-browser.get(S.url)
-
-browser2= webdriver.Chrome()
-browser2.get(S.url2)
-browser.refresh()    #다시 불러오기
-
-html =browser.find_element(By.TAG_NAME, 'html') # 열린 브라우저에서 요소html를 찾기
-html.send_keys(Keys.PAGE_DOWN) #스크롤이 내려간다!
-
-#끝까지 스크롤하기
-src_count = 0
-while src_count < len(browser.page_source):
-    src_count = len(browser.page_source)
-    html.send_keys(Keys.PAGE_DOWN)
-    time.sleep(1)
-
-#이들의 가격들 쫙 출력하기
-keyword ='신라면'
-url = f'https://www.google.com/search?q={keyword}'
-
-soup = BeautifulSoup(browser.page_source, 'lxml')
-elms =soup.find_all(class_= re.compile(r'^basicList_title'))
-for e in elms:
-    title = e.a['title']
-    price = e.next_sibling.find(class_=re.compile('^price_num')).string
-    print(f'{price} : {title}')
-'''
+window.mainloop()
 
