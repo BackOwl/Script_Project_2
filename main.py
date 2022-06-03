@@ -34,16 +34,16 @@ menu = Menu()
 menu_file = Menu(menu, tearoff=False)  # True일경우 메뉴분리
 menu_url = Menu(menu, tearoff=False)
 menu_file.add_command(label='ChangeImage', command=F.open_file, accelerator='Ctrl+o')
-menu_url.add_command(label='ChangeUrl', command=F.Change_Url, accelerator='Ctrl+U')
+#menu_url.add_command(label='ChangeUrl', command=F.Change_Url, accelerator='Ctrl+U')
 
 menu.add_cascade(label='File', menu = menu_file )
-menu.add_cascade(label='Url', menu = menu_url )
+#menu.add_cascade(label='Url', menu = menu_url )
 
 window.config(menu=menu)
 # 키 설정
 window.bind("<Escape>", Stop)
 window.bind("<Control-o>", F.open_file)
-window.bind("<Control-u>", F.Change_Url)
+#window.bind("<Control-u>", F.Change_Url)
 
 
 window.mainloop()

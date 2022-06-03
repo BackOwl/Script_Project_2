@@ -5,17 +5,31 @@ from bs4 import BeautifulSoup
 from PIL import ImageTk, ImageColor,Image,ImageDraw,ImageFont
 from tkinter import filedialog, messagebox
 
+from tkinter import *
+from tkinter.ttk import *
+
 import random
 import os
 import Server as S
 
+window_1 = Tk()
+window_1.title(f"Serve_F")
+window_1.geometry("400x300+500+200")
+window_1.resizable(False, False)
+
+
 def _1_GooGle():
+    browser = webdriver.Chrome()
+    browser.get(S.url1)
+
     pass
 
 def _2_MultiMap():
+
     pass
 
 def _3_TimerAlram():
+
     pass
 
 def Make_fight_image(img):

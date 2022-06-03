@@ -4,7 +4,7 @@ for i in f.readlines():
     Read_list.append(i.replace("\n", ""))
 
 keyword =Read_list[0]
-url1 = Read_list[1]
+url1 = Read_list[1] # 무조건 google로 고정.
 url2 = Read_list[2]
 url3 = Read_list[3]
 url4 = Read_list[4]
