@@ -4,32 +4,30 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from PIL import ImageTk, ImageColor,Image,ImageDraw,ImageFont
 from tkinter import filedialog, messagebox
-
-from tkinter import *
-from tkinter.ttk import *
+import tkinter as tk
 
 import random
 import os
 import Server as S
 
-window_1 = Tk()
-window_1.title(f"Serve_F")
-window_1.geometry("400x300+500+200")
-window_1.resizable(False, False)
-
 
 def _1_GooGle():
-    browser = webdriver.Chrome()
-    browser.get(S.url1)
-
+    print('구글구글')
+    newWindow = tk.Toplevel()
+    labelExample = tk.Label(newWindow, text="New Window")
+    buttonExample = tk.Button(newWindow, text="New Window button")
+    labelExample.pack()
+    buttonExample.pack()
     pass
 
 def _2_MultiMap():
-
+    print('맵맵')
+    newWindow = tk.Toplevel()
     pass
 
 def _3_TimerAlram():
-
+    print('알람알람')
+    newWindow = tk.Toplevel()
     pass
 
 def Make_fight_image(img):
@@ -60,6 +58,9 @@ def open_file(event =None):
 
 
 def Change_Url(event =None):
+    # 많은 검색엔진의 Serch들을 가져온다. 10개이상
+    # 그 중 랜덤 4개를 꺼내오고, 맞춰서 이미지 다운 링크를 걸어줄것이다.
+    # 가능하다면 논문 검색은 4개로 줄여서 따로 버튼에 넣도록 하자.
     pass
 
 '''
