@@ -35,6 +35,7 @@ def Make_fight_image(img):
 def open_file(event =None):
     S.image = filedialog.askopenfilename(title='Select text files',
                                             filetype=(("png files(.png)", ".png"),("jpg files(.jpg)", ".jpg"),("bmp files(.bmp)", ".bmp")))
+    #f = open('Server_info.txt', 'w', encoding='UTF8')
 def Change_Url(event =None):
     pass
 
