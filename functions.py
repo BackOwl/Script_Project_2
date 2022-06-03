@@ -33,9 +33,18 @@ def Make_fight_image(img):
 
 
 def open_file(event =None):
-    S.image = filedialog.askopenfilename(title='Select text files',
-                                            filetype=(("png files(.png)", ".png"),("jpg files(.jpg)", ".jpg"),("bmp files(.bmp)", ".bmp")))
-    #f = open('Server_info.txt', 'w', encoding='UTF8')
+    f = open('Server_info.txt', 'rt', encoding='UTF8')
+    Read_list = []
+    for i in f.readlines():
+        Read_list.append(i.replace("\n", ""))
+
+    Read_list[5] =filedialog.askopenfilename(title='Select text files',
+                            filetype=(("png files(.png)", ".png"),("jpg files(.jpg)", ".jpg"),("bmp files(.bmp)", ".bmp")))
+
+    with open('Server_info.txt', 'w', encoding='UTF8') as f:
+        f.write('\n'.join(Read_list))
+
+
 def Change_Url(event =None):
     pass
 

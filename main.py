@@ -32,7 +32,7 @@ Label(window, image=tk_image).pack(side=LEFT)
 # 메뉴
 menu = Menu()
 menu_file = Menu(menu, tearoff=False)  # True일경우 메뉴분리
-menu_url  = Menu(menu, tearoff=False)
+menu_url = Menu(menu, tearoff=False)
 menu_file.add_command(label='ChangeImage', command=F.open_file, accelerator='Ctrl+o')
 menu_url.add_command(label='ChangeUrl', command=F.Change_Url, accelerator='Ctrl+U')
 
