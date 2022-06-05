@@ -10,7 +10,12 @@ import tkinter.ttk as ttk
 
 import random
 import os
+import re
 import time
+import keyboard
+import pyperclip
+#import pyautogui
+import winsound
 import Server as S
 
 
@@ -26,9 +31,17 @@ def _1_GooGle():
     MN_Button =tk.Button(newWindow, command=typo_MN, text='      -      ')
     WD_Button =tk.Button(newWindow, command=typo_WD, text='    "   "    ')
     Explain_name = tk.Label(newWindow, text="Explain")
-    Explain_main = ScrolledText(newWindow,width= 20, height=15,font=('Arial',10))
-    Explain_main.insert(tk.END,"---------------------------" )
+    Explain_main = ScrolledText(newWindow,width= 20, height=15,font=('NanumGothic',10))
+    Explain_main.insert(tk.END,"-------음?--------------------" ) #설명문 적을 것.
+    Explain_main.configure(state='disabled')
 
+    # 구글 열기
+    browser = webdriver.Chrome()
+    browser.get(S.Goo_Search)
+    S.Now_Browser.append(browser)
+
+    # 현재 클립보드 내용을 계속 보여주는 거도 있었으면 좋겠어..
+    # 오토로 강의 켜주고 꺼주는거 있었으면 좋겠다 ㅎ
     PL_Button.pack()
     MN_Button.pack()
     WD_Button.pack()
@@ -42,7 +55,7 @@ def _2_MultiMap():
     newWindow.resizable(False, False)
 
     # 버튼
-
+    #5 STRING 강의파일 참고
 
     pass
 
@@ -89,13 +102,55 @@ def Change_Url(event =None):
     pass
 
 def typo_PL():
+    # 2. c+p에 이 함수 연결하기(원격함수?)
+    Now_Honkey = typo_PL
+    pyperclip.copy('PLPL')
+
+    #1. search 값 받아와서 + 넣고 다시 검색로딩하게
+    xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
+    time.sleep(0.1)  ## 0.5초
+    element = S.Now_Browser[0].find_element_by_name('q').send_keys("+")
+    #S.Now_Browser[0].find_element(By.XPATH, xpath).send_keys(Keys.ENTER)  # 엔터 입력
+    time.sleep(0.1)
+
+    #pyautogui.moveTo(200, 400)
+    #pyautogui.click()
+    S.Now_Browser[0].find_element(By.XPATH, xpath).click()
+    print("나 작동중이에요")
+
+
     pass
 def typo_MN():
+    Now_Honkey =typo_MN
+    pyperclip.copy('MONO')
+    xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
+    time.sleep(0.1)  ## 0.5초
+    element = S.Now_Browser[0].find_element_by_name('q').send_keys("-")
+    # S.Now_Browser[0].find_element(By.XPATH, xpath).send_keys(Keys.ENTER)  # 엔터 입력
+    time.sleep(0.1)
+
+    # pyautogui.moveTo(200, 400)
+    # pyautogui.click()
+    S.Now_Browser[0].find_element(By.XPATH, xpath).click()
     pass
 def typo_WD():
-    pass
+    Now_Honkey = typo_WD
+    pyperclip.copy('WDWD')
 
+    xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
+    time.sleep(0.1)  ## 0.5초
+    element = S.Now_Browser[0].find_element_by_name('q').send_keys("\" \"")
+    # S.Now_Browser[0].find_element(By.XPATH, xpath).send_keys(Keys.ENTER)  # 엔터 입력
+    time.sleep(0.1)
 
+    # pyautogui.moveTo(200, 400)
+    # pyautogui.click()
+    S.Now_Browser[0].find_element(By.XPATH, xpath).click()
+
+Now_Honkey=typo_PL
+keyboard.add_hotkey('control+a',Now_Honkey)
+
+# https://devyurim.github.io/python/crawler/2018/08/13/crawler-3.html
 '''
 browser = webdriver.Chrome()
 browser.get(S.url)
