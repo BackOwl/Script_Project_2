@@ -23,6 +23,7 @@ import Server as S
 def _1_GooGle():
     print('구글구글')
     newWindow = tk.Toplevel()
+    newWindow.title("Search_Google")
     newWindow.geometry("200x350+1100+100")
     newWindow.resizable(False, False)
 
@@ -51,17 +52,42 @@ def _1_GooGle():
 def _2_MultiMap():
     print('맵맵')
     newWindow = tk.Toplevel()
+    newWindow.title("Search_Multi")
     newWindow.geometry("200x400+1000+200")
     newWindow.resizable(False, False)
 
     # 버튼
-    #5 STRING 강의파일 참고
+    PL_Button = tk.Button(newWindow, command=typo_PL, text="      +      ")
 
-    pass
+
+    # 체크박스에 체크할 경우, 논문으로 검색 -> 두개의 논문사이트는 원격으로 설정해야한다.
+    # 체크박스에 체크할 경우, 영어로 검색가능한 사이트는 영어까지 검색해서 탭으로 띄우도록 한다. 구글같은거
+
+    # 이 아래로는 엔터 작용 후 넘길 함수로 옳길 예정이다.
+    # 웹들 부르기
+    # 주소 가져오기
+    # 숫자로 정해진 주소번호 4개를 Read_list에 꺼내온다.1-4
+    ''' f = open('Server_info.txt', 'rt', encoding='UTF8')
+    Read_list = []
+    for i in f.readlines():
+        Read_list.append(i.replace("\n", ""))'''
+
+    # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
+
+    # 가져온 주소를 검색키워드 keyword로 치환한다. -> 입력받을 수 있음. 이떄, 번역기를 돌려서 영어버전 keyword준비.
+    # keyword = 'whathappen?' # 띄어쓰기를 + 로 바꿔야함.
+
+    '''  url = Read_list[4]
+    url = re.sub('\{keyword\}', f'{keyword}', url)'''
+
+    # 각자 탭에서 검색한다. => 창으로도 가능하게 해보자.
+    # 이미지 랜덤추출 함수도 정의해야함.
+    #5 STRING 강의파일 참고하여 클립보드에 출처를 복사할 수 있도록해야함.
 
 def _3_TimerAlram():
     print('알람알람')
     newWindow = tk.Toplevel()
+    newWindow.title("Timer_Alram")
     newWindow.geometry("200x400+1000+200")
     newWindow.resizable(False, False)
 

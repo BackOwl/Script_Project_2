@@ -2,5 +2,5 @@
 www.google.com
 www.naver.com
 www.naver.com
-www.naver.com
+https://www.google.com/search?q={keyword}
 C:/Users/백 아울/Desktop/스크립트 언어/Script_Project_2/그림용1.bmp

@@ -1,0 +1,9 @@
+https://www.google.com/search?q={keyword}
+https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=helpme
+
+
+
+
+
+https://www.dbpia.co.kr/search/topSearch?startCount=0&collection=ALL&range=A&searchField=ALL&sort=RANK&query=helpme&srchOption=*&includeAr=false
+http://www.riss.kr/search/Search.do?colName=all&isDetailSearch=N&searchGubun=true&oldQuery=&sflag=1&fsearchMethod=search&isFDetailSearch=N&searchQuery=helpme&kbid=&pageNumber=1&query=helpme
