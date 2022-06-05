@@ -2,7 +2,6 @@ import tkinter.ttk
 from tkinter import *
 from tkinter.ttk import *
 import re
-import time
 import Server as S
 import Functions as F
 

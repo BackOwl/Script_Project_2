@@ -4,30 +4,57 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from PIL import ImageTk, ImageColor,Image,ImageDraw,ImageFont
 from tkinter import filedialog, messagebox
+from tkinter.scrolledtext import ScrolledText
 import tkinter as tk
+import tkinter.ttk as ttk
 
 import random
 import os
+import time
 import Server as S
+
 
 
 def _1_GooGle():
     print('구글구글')
     newWindow = tk.Toplevel()
-    labelExample = tk.Label(newWindow, text="New Window")
-    buttonExample = tk.Button(newWindow, text="New Window button")
-    labelExample.pack()
-    buttonExample.pack()
-    pass
+    newWindow.geometry("200x350+1100+100")
+    newWindow.resizable(False, False)
+
+    # 버튼
+    PL_Button =tk.Button(newWindow, command=typo_PL, text="      +      ")
+    MN_Button =tk.Button(newWindow, command=typo_MN, text='      -      ')
+    WD_Button =tk.Button(newWindow, command=typo_WD, text='    "   "    ')
+    Explain_name = tk.Label(newWindow, text="Explain")
+    Explain_main = ScrolledText(newWindow,width= 20, height=15,font=('Arial',10))
+    Explain_main.insert(tk.END,"---------------------------" )
+
+    PL_Button.pack()
+    MN_Button.pack()
+    WD_Button.pack()
+    Explain_name.pack()
+    Explain_main.pack()
 
 def _2_MultiMap():
     print('맵맵')
     newWindow = tk.Toplevel()
+    newWindow.geometry("200x400+1000+200")
+    newWindow.resizable(False, False)
+
+    # 버튼
+
+
     pass
 
 def _3_TimerAlram():
     print('알람알람')
     newWindow = tk.Toplevel()
+    newWindow.geometry("200x400+1000+200")
+    newWindow.resizable(False, False)
+
+    # 버튼
+
+
     pass
 
 def Make_fight_image(img):
@@ -43,7 +70,6 @@ def Make_fight_image(img):
 
     return ImageTk.PhotoImage(Result_Image)
 
-
 def open_file(event =None):
     f = open('Server_info.txt', 'rt', encoding='UTF8')
     Read_list = []
@@ -56,12 +82,19 @@ def open_file(event =None):
     with open('Server_info.txt', 'w', encoding='UTF8') as f:
         f.write('\n'.join(Read_list))
 
-
 def Change_Url(event =None):
     # 많은 검색엔진의 Serch들을 가져온다. 10개이상
     # 그 중 랜덤 4개를 꺼내오고, 맞춰서 이미지 다운 링크를 걸어줄것이다.
     # 가능하다면 논문 검색은 4개로 줄여서 따로 버튼에 넣도록 하자.
     pass
+
+def typo_PL():
+    pass
+def typo_MN():
+    pass
+def typo_WD():
+    pass
+
 
 '''
 browser = webdriver.Chrome()
