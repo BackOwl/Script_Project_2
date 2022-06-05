@@ -12,6 +12,7 @@ import tkinter.ttk as ttk
 import random
 import os
 import re
+import requests
 import time
 import keyboard
 import Server as S
@@ -33,9 +34,16 @@ S.Now_Browser.append(browser)'''
 def Get_Keyword(event=None):
     global keyword
     global eng_keyword
-    Keyword = Search_Entry.get()
-    #띄어쓰기 변환
+    keyword = Search_Entry.get()
     # 영어로 변환.
+    browser = webdriver.Chrome()
+    browser.get(f'https://papago.naver.com/?sk=ko&tk=en&st={keyword}')
+    time.sleep(1)
+    eng_keyword = browser.find_element(By.CSS_SELECTOR, "div#txtTarget").text
+
+    print(keyword,"-> ",eng_keyword)
+    # 띄어쓰기 변환
+
 
 
 # 버튼
@@ -51,9 +59,9 @@ Search_Entry = tk.Entry(width = 30)
 Search_Entry.bind('<Return>',Get_Keyword)
 
 Result_Image =Image.open(S.image)
-Result_Image =Result_Image.resize((300, 150))
+Result_Image =Result_Image.resize((300, 130))
 Result_Image = ImageTk.PhotoImage(Result_Image)
-#여기에 Search이미지 하나 넣어서 검색창처럼 만들 것. 
+#여기에 Search이미지 하나 넣어서 검색창처럼 만들 것.
 
 
 Search_Entry.place(x=100,y=150)
