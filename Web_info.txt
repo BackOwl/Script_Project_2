@@ -13,3 +13,5 @@ https://www.dbpia.co.kr/search/topSearch?startCount=0&collection=ALL&range=A&sea
 http://www.riss.kr/search/Search.do?colName=all&isDetailSearch=N&searchGubun=true&oldQuery=&sflag=1&fsearchMethod=search&isFDetailSearch=N&searchQuery=helpme&kbid=&pageNumber=1&query={keyword}
 https://scholar.google.com/scholar?hl=ko&as_sdt=0%2C5&q={keyword}&btnG=&oq={keyword}
 https://kiss.kstudy.com/
+https://www.kci.go.kr/kciportal/main.kci
+https://scienceon.kisti.re.kr/main/mainForm.do

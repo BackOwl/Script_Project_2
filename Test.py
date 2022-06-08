@@ -39,7 +39,7 @@ def Get_Keyword(event=None):
     # 영어로 변환. => 영어 구분 부분 만들어야함.
     browser = webdriver.Chrome()
     browser.get(f'https://papago.naver.com/?sk=ko&tk=en&st={keyword}')
-    time.sleep(1)
+    time.sleep(0.1)
     eng_keyword = browser.find_element(By.CSS_SELECTOR, "div#txtTarget").text
 
     # 띄어쓰기 변환
@@ -126,10 +126,10 @@ def Normal_Search():
     if (ignore_Tab.get()):
         browser = webdriver.Chrome()
         browser.get(S.Now_Url[0])
-        time.sleep(0.5)
+        time.sleep(0.1)
         for i in range(3):
             browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
-            time.sleep(0.5)
+            time.sleep(0.1)
     # 창일 경우
     else:
         browser = [webdriver.Chrome for x in range(4)]
@@ -139,12 +139,13 @@ def Normal_Search():
             browser[i].set_window_position(state[i], state[i + 4])
             browser[i].set_window_size(600, 400)
             browser[i].get(S.Now_Url[i])
-            time.sleep(0.2)
+            time.sleep(0.1)
             S.Now_Browser.append(browser[i])
 
     # 다시 검색버튼이 눌렸을 때, 기존 창들 다 닫히게 or 안닫히게 체크박스
     pass
 def Nonmun_Search():
+    # 추가적인 논문페이지 구현해서 추가로 띄어 같이 넣기. //15-부터
     pass
 def Down_Randomimg():
     # 이미지 랜덤추출 함수도 정의해야함.
