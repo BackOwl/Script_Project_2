@@ -18,7 +18,6 @@ import keyboard
 import Server as S
 
 
-check_list = {'Eng':False,'Non':False,'Tab':False}
 #
 keyword =''
 eng_keyword =''
@@ -61,9 +60,6 @@ ignore_Tab = tk.IntVar()
 Check_Eng = tk.Checkbutton(text='영어 Search',variable=ignore_Eng)
 Check_Non = tk.Checkbutton(text='논문 Search',variable=ignore_Non)
 Check_Tab = tk.Checkbutton(text='탭 활성 검색',variable=ignore_Tab)
-check_list['Eng'] =ignore_Eng.get()
-check_list['Non'] =ignore_Non.get()
-check_list['Tab'] =ignore_Tab.get()
 #ignore_Eng.get() 값가져오기, set(1) 체크하기.
 
 Search_Entry = tk.Entry(width = 30)
@@ -84,24 +80,31 @@ tk.Label(newWindow, image=Result_Image).place(x=50, y=10)
 
 def Normal_Search():
     # 웹들 부르기
+    global ignore_Eng
+    global ignore_Non
+    global ignore_Tab
+
     # 주소 가져오기
     f = open('Server_info.txt', 'rt', encoding='UTF8')
     Read_list = []
     Web_list = []
     for i in f.readlines():
         Read_list.append(i.replace("\n", ""))
+
+    f = open('Web_info.txt', 'rt', encoding='UTF8')
     for i in f.readlines():
         Web_list.append(i.replace("\n", ""))
 
     # 숫자로 정해진 주소번호 4개를 0-5 한글, 6-10영어 11-14논문 Read_list에서 꺼내온다.
     # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
     # 논문 체크일 때
-    if (check_list['Non']):
+    if (ignore_Non.get()):
         for i in range(4):
             S.Now_Url.append(Web_list[i + 11])
+            Nonmun_Search()
     # 영어 체크일 때
     else:
-        if (check_list['Eng']):
+        if (ignore_Eng.get()):
             for i in range(4):
                 S.Now_Url.append(Web_list[int((Read_list[i + 1])) % 11])
         # 일반 체크없을 때
@@ -110,29 +113,38 @@ def Normal_Search():
                 S.Now_Url.append(Web_list[int(Read_list[i + 1]) % 6])
     # 가져온 주소를 검색키워드 keyword로 치환한다.
     for i in range(4):
-        if (check_list['Eng']):
-            if(int((Read_list[i + 1]))>5):
+        if (ignore_Eng.get()):
+            if (int((Read_list[i + 1])) > 5):
                 S.Now_Url[i] = re.sub('\{keyword\}', f'{eng_keyword}', S.Now_Url[i])
+                print(S.Now_Url[i])
             else:
                 S.Now_Url[i] = re.sub('\{keyword\}', f'{keyword}', S.Now_Url[i])
         else:
             S.Now_Url[i] = re.sub('\{keyword\}', f'{keyword}', S.Now_Url[i])
 
     # 각자 탭에서 검색한다. => 창으로도 가능하게 해보자.
-    # 창일 경우 if
-
-    # 탭일 경우 else
-    browser = webdriver.Chrome()
-    browser.get('https://papago.naver.com/')
-    time.sleep(4)
-    browser.execute_script('window.open("https://ko.wiktionary.org/wiki/그리움')
-
+    if (ignore_Tab.get()):
+        browser = webdriver.Chrome()
+        browser.get(S.Now_Url[0])
+        time.sleep(0.5)
+        for i in range(3):
+            browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
+            time.sleep(0.5)
+    # 창일 경우
+    else:
+        browser = [webdriver.Chrome for x in range(4)]
+        state = [0, 0, 600, 600, 400, 0, 0, 400]
+        for i in range(4):
+            browser[i] = webdriver.Chrome()
+            browser[i].set_window_position(state[i], state[i + 4])
+            browser[i].set_window_size(600, 400)
+            browser[i].get(S.Now_Url[i])
+            time.sleep(0.2)
+            S.Now_Browser.append(browser[i])
 
     # 다시 검색버튼이 눌렸을 때, 기존 창들 다 닫히게 or 안닫히게 체크박스
     pass
 def Nonmun_Search():
-    pass
-def Normal_Eng_Search():
     pass
 def Down_Randomimg():
     # 이미지 랜덤추출 함수도 정의해야함.
@@ -140,13 +152,6 @@ def Down_Randomimg():
 def Copy_Url():
     # #5 STRING 강의파일 참고하여 클립보드에 출처를 복사할 수 있도록해야함.
     pass
-
-
-
-
-
-
-
 
 
 

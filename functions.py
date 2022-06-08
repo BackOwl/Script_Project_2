@@ -174,4 +174,4 @@ def typo_WD():
 Now_Honkey=typo_PL
 keyboard.add_hotkey('control+a',Now_Honkey)
 
-# https://devyurim.github.io/python/crawler/2018/08/13/crawler-3.html
+# https://yobbicorgi.tistory.com/30
