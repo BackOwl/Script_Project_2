@@ -144,8 +144,6 @@ def typo_PL():
     S.Now_Browser[0].find_element(By.XPATH, xpath).click()
     print("나 작동중이에요")
 
-
-    pass
 def typo_MN():
     Now_Honkey =typo_MN
     pyperclip.copy('MONO')
@@ -158,7 +156,7 @@ def typo_MN():
     # pyautogui.moveTo(200, 400)
     # pyautogui.click()
     S.Now_Browser[0].find_element(By.XPATH, xpath).click()
-    pass
+
 def typo_WD():
     Now_Honkey = typo_WD
     pyperclip.copy('WDWD')
@@ -177,33 +175,3 @@ Now_Honkey=typo_PL
 keyboard.add_hotkey('control+a',Now_Honkey)
 
 # https://devyurim.github.io/python/crawler/2018/08/13/crawler-3.html
-'''
-browser = webdriver.Chrome()
-browser.get(S.url)
-
-browser2= webdriver.Chrome()
-browser2.get(S.url2)
-browser.refresh()    #다시 불러오기
-
-html =browser.find_element(By.TAG_NAME, 'html') # 열린 브라우저에서 요소html를 찾기
-html.send_keys(Keys.PAGE_DOWN) #스크롤이 내려간다!
-
-#끝까지 스크롤하기
-src_count = 0
-while src_count < len(browser.page_source):
-    src_count = len(browser.page_source)
-    html.send_keys(Keys.PAGE_DOWN)
-    time.sleep(1)
-
-#이들의 가격들 쫙 출력하기
-keyword ='신라면'
-url = f'https://www.google.com/search?q={keyword}'
-
-soup = BeautifulSoup(browser.page_source, 'lxml')
-elms =soup.find_all(class_= re.compile(r'^basicList_title'))
-for e in elms:
-    title = e.a['title']
-    price = e.next_sibling.find(class_=re.compile('^price_num')).string
-    print(f'{price} : {title}')
-'''
-
