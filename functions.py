@@ -1,3 +1,5 @@
+import tkinter
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -42,13 +44,13 @@ def _1_GooGle():
     newWindow.title("Search_Google")
     newWindow.geometry("200x350+1100+100")
     newWindow.resizable(False, False)
-
+    newWindow['bg'] = '#b2515b'
     # 버튼
-    PL_Button =tk.Button(newWindow, command=typo_PL, text="      +      ")
-    MN_Button =tk.Button(newWindow, command=typo_MN, text='      -      ')
-    WD_Button =tk.Button(newWindow, command=typo_WD, text='    "   "    ')
-    Explain_name = tk.Label(newWindow, text="Explain")
-    Explain_main = ScrolledText(newWindow,width= 20, height=15,font=('NanumGothic',10))
+    PL_Button =tk.Button(newWindow, command=typo_PL,bg ='#2e6797',fg ='#ffffff', text="      +      ")
+    MN_Button =tk.Button(newWindow, command=typo_MN, bg ='#2e6797',fg ='#ffffff',text='      -      ')
+    WD_Button =tk.Button(newWindow, command=typo_WD, bg ='#2e6797',fg ='#ffffff',text='    "   "    ')
+    Explain_name = tk.Label(newWindow, bg ='#2e6797',fg ='#ffffff',text="- Explain -")
+    Explain_main = ScrolledText(newWindow,bg ='#b2515b',fg ='#ffffff',width= 20, height=15,font=('NanumGothic',10))
     Explain_main.insert(tk.END,"-------음?--------------------" ) #설명문 적을 것.
     Explain_main.configure(state='disabled')
 
@@ -76,6 +78,7 @@ def _2_MultiMap():
     newWindow.title("Search_Multi")
     newWindow.geometry("400x300+550+250")
     newWindow.resizable(False, False)
+    newWindow['bg'] = '#b2515b'
 
     # 버튼
     # 체크박스에 체크할 경우, 논문으로 검색 -> 두개의 논문사이트는 원격으로 설정해야한다.
@@ -83,26 +86,27 @@ def _2_MultiMap():
     ignore_Eng = tk.IntVar()
     ignore_Non = tk.IntVar()
     ignore_Tab = tk.IntVar()
-    Check_Eng = tk.Checkbutton(newWindow,text='영어 Search', variable=ignore_Eng)
-    Check_Non = tk.Checkbutton(newWindow,text='논문 Search', variable=ignore_Non)
-    Check_Tab = tk.Checkbutton(newWindow,text='탭 활성 검색', variable=ignore_Tab)
+    Check_Eng = tk.Checkbutton(newWindow,text='영어 Search',bg ='#2e6797', variable=ignore_Eng)
+    Check_Non = tk.Checkbutton(newWindow,text='논문 Search',bg ='#2e6797',variable=ignore_Non)
+    Check_Tab = tk.Checkbutton(newWindow,text='탭 활성 검색',bg ='#2e6797', variable=ignore_Tab)
     # ignore_Eng.get() 값가져오기, set(1) 체크하기.
 
     Search_Entry = tk.Entry(newWindow,width=30)
     Search_Entry.bind('<Return>', Get_Keyword)
 
-    Result_Image = Image.open(S.image)
+    Result_Image = Image.open('Logo.png')
     Result_Image = Result_Image.resize((300, 130))
     Result_Image = ImageTk.PhotoImage(Result_Image)
     Label = tk.Label(newWindow, image=Result_Image)
     Label.image = Result_Image
+
     # 여기에 Search이미지 하나 넣어서 검색창처럼 만들 것.
 
     Label.place(x=50, y=10)
-    Search_Entry.place(x=100, y=150)
-    Check_Eng.place(x=170, y=180)
-    Check_Non.place(x=170, y=200)
-    Check_Tab.place(x=170, y=220)
+    Search_Entry.place(x=90, y=150)
+    Check_Eng.place(x=160, y=190)
+    Check_Non.place(x=160, y=210)
+    Check_Tab.place(x=160, y=230)
 
 def _3_TimerAlram():
     global time_label
@@ -116,22 +120,23 @@ def _3_TimerAlram():
     newWindow.title("Timer_Alram")
     newWindow.geometry("500x400+1000+200")
     newWindow.resizable(False, False)
+    newWindow['bg'] = '#b2515b'
 
     # 버튼들
     tabs_control = ttk.Notebook(newWindow)
     clock_tab = tk.Frame(tabs_control)
     alarm_tab = tk.Frame(tabs_control)
-    time_label = tk.Label(newWindow, font='calibri 40 bold', foreground='black')
+    time_label = tk.Label(newWindow, font='calibri 40 bold',bg ='#b2515b',foreground='#ffffff')
     time_label.place(x=110, y=40)
-    date_label = tk.Label(newWindow, font='calibri 40 bold', foreground='black')
+    date_label = tk.Label(newWindow, font='calibri 40 bold',bg ='#b2515b', foreground='#ffffff')
     date_label.place(x=120, y=100)
     get_alarm_time_entry = tk.Entry(newWindow, font='calibri 15 bold')
     get_alarm_time_entry.place(x=140, y=200)
 
-    alarm_instructions_label = tk.Label(newWindow, font='calibri 10 bold',text="시간을 입력하세요 Ex) 01:30 PM\n 01 -> 시(Hour)\n 30 -> 분(Min)\n")
+    alarm_instructions_label = tk.Label(newWindow, font='calibri 10 bold',bg ='#b2515b',foreground='#ffffff',text="시간을 입력하세요 Ex) 01:30 PM\n 01 -> 시(Hour)\n 30 -> 분(Min)\n")
     alarm_instructions_label.place(x=140, y=240)
-    set_alarm_button = tk.Button(newWindow, text="Set 알람", command=alarm)
-    set_alarm_button.place(x=320, y=200)
+    set_alarm_button = tk.Button(newWindow,bg ='#2e6797',fg ='#ffffff', text="Set 알람", command=alarm)
+    set_alarm_button.place(x=350, y=203)
     alarm_status_label = tk.Label(newWindow, font='calibri 15 bold')
     alarm_status_label.place(x=140, y=280)
     clock()
@@ -162,8 +167,17 @@ def open_file(event =None):
         f.write('\n'.join(Read_list))
 
 def Change_Url(event =None):
-    # 많은 검색엔진의 Serch들을 가져온다. 10개이상
-    # 그 중 랜덤 4개를 꺼내오고, 맞춰서 이미지 다운 링크를 걸어줄것이다.
+    f = open('Server_info.txt', 'rt', encoding='UTF8')
+    Read_list = []
+    for i in f.readlines():
+        Read_list.append(i.replace("\n", ""))
+
+    for i in range(1,4):
+        Read_list[i]= str(random.randint(0,10))
+
+    with open('Server_info.txt', 'w', encoding='UTF8') as f:
+        f.write('\n'.join(Read_list))
+
     # 가능하다면 논문 검색은 4개로 줄여서 따로 버튼에 넣도록 하자.
     pass
 
@@ -396,6 +410,7 @@ def alarm():
         get_alarm_time_entry.delete(0, tk.END)
         alarm_status_label.config(text='')
     else:
+        tkinter.messagebox.showerror("알람시작!",f"{alarm_time}에 알람이 울립니다!")
         alarm_status_label.config(text='알람 시작!')
         get_alarm_time_entry.config(state='disabled')
         set_alarm_button.config(state='disabled')

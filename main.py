@@ -14,6 +14,7 @@ window = Tk()
 window.title("Script_2 Program")
 window.geometry("400x300+500+200")
 window.resizable(False, False)
+window['bg'] = '#6a907f'
 
 
 # 버튼
