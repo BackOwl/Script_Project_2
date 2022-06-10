@@ -1,0 +1,6 @@
+//*[@id="keyword"]
+//*[@id="gs_hdr_tsi"]
+//*[@id="query"]
+//*[@id="bnHead"]/div[3]/div/div[1]/div[1]/a
+//*[@id="gs_hdr_tsb"]
+//*[@id="btnIndexSearch"]

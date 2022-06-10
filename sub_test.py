@@ -79,7 +79,7 @@ newWindow.resizable(False, False)
 browser.get(S.Goo_Search)
 S.Now_Browser.append(browser)'''
 
-def Get_Keyword(event=None):
+'''def Get_Keyword(event=None):
     global keyword
     global eng_keyword
     keyword = Search_Entry.get()
@@ -95,13 +95,13 @@ def Get_Keyword(event=None):
     print(keyword,"-> ",eng_keyword)
     browser.close()
 
-    Normal_Search()
+    Normal_Search()'''
 
 
 # 버튼
 # 체크박스에 체크할 경우, 논문으로 검색 -> 두개의 논문사이트는 원격으로 설정해야한다.
 # 체크박스에 체크할 경우, 영어로 검색가능한 사이트는 영어까지 검색해서 탭으로 띄우도록 한다. 구글같은거
-ignore_Eng = tk.IntVar()
+'''ignore_Eng = tk.IntVar()
 ignore_Non = tk.IntVar()
 ignore_Tab = tk.IntVar()
 Check_Eng = tk.Checkbutton(text='영어 Search',variable=ignore_Eng)
@@ -123,7 +123,7 @@ Search_Entry.place(x=100,y=150)
 Check_Eng.place(x=170,y=180)
 Check_Non.place(x=170,y=200)
 Check_Tab.place(x=170,y=220)
-tk.Label(newWindow, image=Result_Image).place(x=50, y=10)
+tk.Label(newWindow, image=Result_Image).place(x=50, y=10)'''
 
 def Normal_Search():
     # 웹들 부르기
@@ -132,6 +132,7 @@ def Normal_Search():
     global ignore_Tab
     # 주소 가져오기
     f = open('Server_info.txt', 'rt', encoding='UTF8')
+    #f = open('C://Users//백 아울//Desktop//스크립트 언어//Script_Project_2//Server_info.txt', 'rt', encoding='UTF8')
     Read_list = []
     Web_list = []
     for i in f.readlines():
@@ -144,30 +145,54 @@ def Normal_Search():
     # 숫자로 정해진 주소번호 4개를 0-5 한글, 6-10영어 11-14논문 Read_list에서 꺼내온다.
     # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
     # 논문 체크일 때
-    if (ignore_Non.get()):
-        for i in range(4):
-            S.Now_Url.append(Web_list[i + 11])
-            #Nonmun_Search()
-    # 영어 체크일 때
-    else:
-        if (ignore_Eng.get()):
-            for i in range(4):
-                S.Now_Url.append(Web_list[int((Read_list[i + 1])) % 11])
-        # 일반 체크없을 때
-        else:
-            for i in range(4):
-                S.Now_Url.append(Web_list[int(Read_list[i + 1]) % 6])
-    # 가져온 주소를 검색키워드 keyword로 치환한다.
-    for i in range(4):
-        if (ignore_Eng.get()):
-            if(int((Read_list[i + 1]))>5):
-                S.Now_Url[i] = re.sub('\{keyword\}', f'{eng_keyword}', S.Now_Url[i])
-                print( S.Now_Url[i] )
-            else:
-                S.Now_Url[i] = re.sub('\{keyword\}', f'{keyword}', S.Now_Url[i])
-        else:
-            S.Now_Url[i] = re.sub('\{keyword\}', f'{keyword}', S.Now_Url[i])
-    print(S.Now_Url)
+    global ignore_Tab
+    global ignore_Eng
 
+    Xpath_List = []
+    f = open('Xpath_info.txt', 'rt', encoding='UTF8')
+    for i in f.readlines():
+        Xpath_List.append(i.replace("\n", ""))
+
+
+    for i in range(3):
+        S.Now_Url.append(Web_list[i + 11])
+
+
+        '''browser = webdriver.Chrome()
+        browser.get(S.Now_Url[0])
+        time.sleep(0.1)
+        for i in range(3):
+            browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
+            time.sleep(0.1)
+            browser.switch_to.window(browser.window_handles[-1])  # 새로 연 탭으로 이동
+            browser.find_element(By.XPATH, Xpath_List[i]).click()  # 엔터 입력
+            time.sleep(1)
+            if (ignore_Eng.get()):
+                browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"{eng_keyword}")
+            else:
+                browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"{keyword}")
+            browser.find_element(By.XPATH, Xpath_List[i + 6]).send_keys(Keys.ENTER)  # 엔터 입력
+
+        S.Now_Browser.append(browser)'''
+    # 창일 경우
+
+    browser = [webdriver.Chrome for x in range(4)]
+    state = [0, 0, 600, 600, 400, 0, 0, 400]
+    i=0
+    browser = webdriver.Chrome()
+    browser.set_window_position(600, 600)
+    browser.set_window_size(600, 400)
+    browser.get(Web_list[i+11])
+    time.sleep(3)
+    browser.find_element(By.XPATH, Xpath_List[i]).click()  # 엔터 입력
+    time.sleep(3)
+    browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"가나다라")
+    time.sleep(3)
+    browser.find_element(By.XPATH, Xpath_List[i + 6]).send_keys(Keys.ENTER)  # 엔터 입력
+
+    S.Now_Browser.append(browser)
+
+
+Normal_Search()
 
 newWindow.mainloop()

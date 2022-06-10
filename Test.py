@@ -100,8 +100,8 @@ def Normal_Search():
     # 논문 체크일 때
     if (ignore_Non.get()):
         for i in range(4):
-            S.Now_Url.append(Web_list[i + 11])
-            Nonmun_Search()
+            S.Now_Url.append(Web_list[12+int((Read_list[i + 1])) % 6])
+        Nonmun_Search()
     # 영어 체크일 때
     else:
         if (ignore_Eng.get()):
@@ -123,29 +123,35 @@ def Normal_Search():
             S.Now_Url[i] = re.sub('\{keyword\}', f'{keyword}', S.Now_Url[i])
 
     # 각자 탭에서 검색한다. => 창으로도 가능하게 해보자.
-    if (ignore_Tab.get()):
-        browser = webdriver.Chrome()
-        browser.get(S.Now_Url[0])
-        time.sleep(0.1)
-        for i in range(3):
-            browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
-            time.sleep(0.1)
-    # 창일 경우
+    if (ignore_Non.get()):
+        Nonmun_Search()
     else:
-        browser = [webdriver.Chrome for x in range(4)]
-        state = [0, 0, 600, 600, 400, 0, 0, 400]
-        for i in range(4):
-            browser[i] = webdriver.Chrome()
-            browser[i].set_window_position(state[i], state[i + 4])
-            browser[i].set_window_size(600, 400)
-            browser[i].get(S.Now_Url[i])
+        if (ignore_Tab.get()):
+            browser = webdriver.Chrome()
+            browser.get(S.Now_Url[0])
             time.sleep(0.1)
-            S.Now_Browser.append(browser[i])
+            for i in range(3):
+                browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
+                time.sleep(0.1)
+            S.Now_Browser.append(browser)
+        # 창일 경우
+        else:
+            browser = [webdriver.Chrome for x in range(4)]
+            state = [0, 0, 600, 600, 400, 0, 0, 400]
+            for i in range(4):
+                browser[i] = webdriver.Chrome()
+                browser[i].set_window_position(state[i], state[i + 4])
+                browser[i].set_window_size(600, 400)
+                browser[i].get(S.Now_Url[i])
+                time.sleep(0.1)
+                S.Now_Browser.append(browser[i])
 
     # 다시 검색버튼이 눌렸을 때, 기존 창들 다 닫히게 or 안닫히게 체크박스
     pass
 def Nonmun_Search():
     # 추가적인 논문페이지 구현해서 추가로 띄어 같이 넣기. //15-부터
+
+
     pass
 def Down_Randomimg():
     # 이미지 랜덤추출 함수도 정의해야함.

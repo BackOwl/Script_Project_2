@@ -80,13 +80,16 @@ def _2_MultiMap():
     Result_Image = Image.open(S.image)
     Result_Image = Result_Image.resize((300, 130))
     Result_Image = ImageTk.PhotoImage(Result_Image)
+    Label = tk.Label(newWindow, image=Result_Image)
+    Label.image = Result_Image
     # 여기에 Search이미지 하나 넣어서 검색창처럼 만들 것.
 
+    Label.place(x=50, y=10)
     Search_Entry.place(x=100, y=150)
     Check_Eng.place(x=170, y=180)
     Check_Non.place(x=170, y=200)
     Check_Tab.place(x=170, y=220)
-    tk.Label(newWindow, image=Result_Image).place(x=50, y=10)
+
 
 def _3_TimerAlram():
     print('알람알람')
@@ -196,9 +199,9 @@ def Normal_Search():
     # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
     # 논문 체크일 때
     if (ignore_Non.get()):
-        for i in range(4):
-            S.Now_Url.append(Web_list[i + 11])
-            Nonmun_Search()
+        for i in range(3):
+            S.Now_Url.append(Web_list[11 +i])
+        Nonmun_Search()
     # 영어 체크일 때
     else:
         if (ignore_Eng.get()):
@@ -220,28 +223,32 @@ def Normal_Search():
             S.Now_Url[i] = re.sub('\{keyword\}', f'{keyword}', S.Now_Url[i])
 
     # 각자 탭에서 검색한다. => 창으로도 가능하게 해보자.
-    if (ignore_Tab.get()):
-        browser = webdriver.Chrome()
-        browser.get(S.Now_Url[0])
-        time.sleep(0.1)
-        for i in range(3):
-            browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
-            time.sleep(0.1)
-        S.Now_Browser.append(browser)
-    # 창일 경우
+    if (ignore_Non.get()):
+        Nonmun_Search()
     else:
-        browser = [webdriver.Chrome for x in range(4)]
-        state = [0, 0, 600, 600, 400, 0, 0, 400]
-        for i in range(4):
-            browser[i] = webdriver.Chrome()
-            browser[i].set_window_position(state[i], state[i + 4])
-            browser[i].set_window_size(600, 400)
-            browser[i].get(S.Now_Url[i])
+        if (ignore_Tab.get()):
+            browser = webdriver.Chrome()
+            browser.get(S.Now_Url[0])
             time.sleep(0.1)
-            S.Now_Browser.append(browser[i])
+            for i in range(3):
+                browser.execute_script(f'window.open("{S.Now_Url[i + 1]}");')
+                time.sleep(0.1)
+            S.Now_Browser.append(browser)
+        # 창일 경우
+        else:
+            browser = [webdriver.Chrome for x in range(4)]
+            state = [0, 0, 600, 600, 400, 0, 0, 400]
+            for i in range(4):
+                browser[i] = webdriver.Chrome()
+                browser[i].set_window_position(state[i], state[i + 4])
+                browser[i].set_window_size(600, 400)
+                browser[i].get(S.Now_Url[i])
+                time.sleep(0.1)
+                S.Now_Browser.append(browser[i])
 
     # 다시 검색버튼이 눌렸을 때, 기존 창들 다 닫히게 or 안닫히게 체크박스
     pass
+
 def Get_Keyword(event=None):
     global keyword
     global eng_keyword
@@ -263,8 +270,66 @@ def Get_Keyword(event=None):
     Normal_Search()
 
 def Nonmun_Search():
-    # 추가적인 논문페이지 구현해서 추가로 띄어 같이 넣기. //15-부터
-    pass
+    # 추가적인 논문페이지 구현해서 추가로 띄어 같이 넣기. //12-부터
+    global ignore_Tab
+    global ignore_Eng
+    global eng_keyword
+    eng_keyword = eng_keyword.replace("+", " ")
+
+    Xpath_List = []
+    f = open('Xpath_info.txt', 'rt', encoding='UTF8')
+    for i in f.readlines():
+        Xpath_List.append(i.replace("\n", ""))
+
+    if (ignore_Tab.get()):
+        browser = webdriver.Chrome()
+        browser.get(S.Now_Url[0])
+        time.sleep(1)
+        browser.find_element(By.XPATH, Xpath_List[0]).click()
+        time.sleep(1)
+        if (ignore_Eng.get()):
+            browser.find_element(By.XPATH, Xpath_List[0]).send_keys(f"{eng_keyword}")
+        else:
+            browser.find_element(By.XPATH, Xpath_List[0]).send_keys(f"{keyword}")
+            time.sleep(1)
+        browser.find_element(By.XPATH, Xpath_List[0]).send_keys(Keys.ENTER)  # 엔터 입력
+
+        for i in range(1,3):
+            browser.execute_script(f'window.open("{S.Now_Url[i]}");')
+            time.sleep(1)
+            browser.switch_to.window(browser.window_handles[-1])  # 새로 연 탭으로 이동
+            browser.find_element(By.XPATH, Xpath_List[i]).click()
+            time.sleep(1)
+            if (ignore_Eng.get()):
+                browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"{eng_keyword}")
+            else:
+                browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"{keyword}")
+                time.sleep(1)
+            browser.find_element(By.XPATH, Xpath_List[i + 3]).send_keys(Keys.ENTER)  # 엔터 입력
+            time.sleep(1)
+
+        S.Now_Browser.append(browser)
+    # 창일 경우
+    else:
+        browser = [webdriver.Chrome for x in range(3)]
+        state = [0, 0, 600, 600, 400, 0, 0, 400]
+        for i in range(3):
+            browser[i] = webdriver.Chrome()
+            browser[i].set_window_position(state[i], state[i + 4])
+            browser[i].set_window_size(600, 400)
+            browser[i].get(S.Now_Url[i])
+            time.sleep(1)
+            browser[i].find_element(By.XPATH, Xpath_List[i]).click()  # 엔터 입력
+            time.sleep(1)
+            if (ignore_Eng.get()):
+                browser[i].find_element(By.XPATH, Xpath_List[i]).send_keys(f"{eng_keyword}")
+            else:
+                browser[i].find_element(By.XPATH, Xpath_List[i]).send_keys(f"{keyword}")
+            time.sleep(1)
+            browser[i].find_element(By.XPATH, Xpath_List[i+3]).send_keys(Keys.ENTER)  # 엔터 입력
+            time.sleep(1)
+            S.Now_Browser.append(browser[i])
+
 def Down_Randomimg():
     # 이미지 랜덤추출 함수도 정의해야함.
     pass
