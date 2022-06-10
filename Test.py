@@ -17,14 +17,14 @@ import time
 import keyboard
 import Server as S
 
-
+import threading
 #
 keyword =''
 eng_keyword =''
 
 newWindow = tk.Tk()
 newWindow.title("Script_2 Program")
-newWindow.geometry("400x300+550+250")
+newWindow.geometry("500x500+0+250")
 newWindow.resizable(False, False)
 
 
@@ -39,7 +39,7 @@ def Get_Keyword(event=None):
     # 영어로 변환. => 영어 구분 부분 만들어야함.
     browser = webdriver.Chrome()
     browser.get(f'https://papago.naver.com/?sk=ko&tk=en&st={keyword}')
-    time.sleep(0.5)
+    time.sleep(1)
     eng_keyword = browser.find_element(By.CSS_SELECTOR, "div#txtTarget").text
 
     # 띄어쓰기 변환
@@ -48,8 +48,23 @@ def Get_Keyword(event=None):
     print(keyword,"-> ",eng_keyword)
     browser.close()
 
-    #Normal_Search()
+    Normal_Search()
 
+
+# 버튼
+# 체크박스에 체크할 경우, 논문으로 검색 -> 두개의 논문사이트는 원격으로 설정해야한다.
+# 체크박스에 체크할 경우, 영어로 검색가능한 사이트는 영어까지 검색해서 탭으로 띄우도록 한다. 구글같은거
+Search_Entry= ''
+ignore_Eng = ''
+ignore_Non = ''
+ignore_Tab = ''
+
+print('맵맵')
+newWindow = tk.Toplevel()
+newWindow.title("Search_Multi")
+newWindow.geometry("400x300+550+250")
+newWindow.resizable(False, False)
+newWindow['bg'] = '#b2515b'
 
 # 버튼
 # 체크박스에 체크할 경우, 논문으로 검색 -> 두개의 논문사이트는 원격으로 설정해야한다.
@@ -57,26 +72,27 @@ def Get_Keyword(event=None):
 ignore_Eng = tk.IntVar()
 ignore_Non = tk.IntVar()
 ignore_Tab = tk.IntVar()
-Check_Eng = tk.Checkbutton(text='영어 Search',variable=ignore_Eng)
-Check_Non = tk.Checkbutton(text='논문 Search',variable=ignore_Non)
-Check_Tab = tk.Checkbutton(text='탭 활성 검색',variable=ignore_Tab)
-#ignore_Eng.get() 값가져오기, set(1) 체크하기.
+Check_Eng = tk.Checkbutton(newWindow,text='영어 Search',bg ='#2e6797', variable=ignore_Eng)
+Check_Non = tk.Checkbutton(newWindow,text='논문 Search',bg ='#2e6797',variable=ignore_Non)
+Check_Tab = tk.Checkbutton(newWindow,text='탭 활성 검색',bg ='#2e6797', variable=ignore_Tab)
+# ignore_Eng.get() 값가져오기, set(1) 체크하기.
 
-Search_Entry = tk.Entry(width = 30)
-Search_Entry.bind('<Return>',Get_Keyword)
+Search_Entry = tk.Entry(newWindow,width=30)
+Search_Entry.bind('<Return>', Get_Keyword)
 
-
-Result_Image =Image.open(S.image)
-Result_Image =Result_Image.resize((300, 130))
+Result_Image = Image.open('Logo.png')
+Result_Image = Result_Image.resize((300, 130))
 Result_Image = ImageTk.PhotoImage(Result_Image)
-#여기에 Search이미지 하나 넣어서 검색창처럼 만들 것.
+Label = tk.Label(newWindow, image=Result_Image)
+Label.image = Result_Image
 
+# 여기에 Search이미지 하나 넣어서 검색창처럼 만들 것.
 
-Search_Entry.place(x=100,y=150)
-Check_Eng.place(x=170,y=180)
-Check_Non.place(x=170,y=200)
-Check_Tab.place(x=170,y=220)
-tk.Label(newWindow, image=Result_Image).place(x=50, y=10)
+Label.place(x=50, y=10)
+Search_Entry.place(x=90, y=150)
+Check_Eng.place(x=160, y=190)
+Check_Non.place(x=160, y=210)
+Check_Tab.place(x=160, y=230)
 
 def Normal_Search():
     # 웹들 부르기
@@ -99,8 +115,8 @@ def Normal_Search():
     # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
     # 논문 체크일 때
     if (ignore_Non.get()):
-        for i in range(4):
-            S.Now_Url.append(Web_list[12+int((Read_list[i + 1])) % 6])
+        for i in range(3):
+            S.Now_Url.append(Web_list[11 + i])
         Nonmun_Search()
     # 영어 체크일 때
     else:
@@ -139,17 +155,73 @@ def Normal_Search():
             browser = [webdriver.Chrome for x in range(4)]
             state = [0, 0, 600, 600, 400, 0, 0, 400]
             for i in range(4):
+
                 browser[i] = webdriver.Chrome()
                 browser[i].set_window_position(state[i], state[i + 4])
                 browser[i].set_window_size(600, 400)
                 browser[i].get(S.Now_Url[i])
                 time.sleep(0.1)
                 S.Now_Browser.append(browser[i])
-
-    # 다시 검색버튼이 눌렸을 때, 기존 창들 다 닫히게 or 안닫히게 체크박스
-    pass
 def Nonmun_Search():
-    # 추가적인 논문페이지 구현해서 추가로 띄어 같이 넣기. //15-부터
+    global ignore_Tab
+    global ignore_Eng
+    global eng_keyword
+    eng_keyword = eng_keyword.replace("+", " ")
+
+    Xpath_List = []
+    f = open('Xpath_info.txt', 'rt', encoding='UTF8')
+    for i in f.readlines():
+        Xpath_List.append(i.replace("\n", ""))
+
+    if (ignore_Tab.get()):
+        browser = webdriver.Chrome()
+        browser.implicitly_wait(2)
+        browser.get(S.Now_Url[0])
+        #time.sleep(1)
+        browser.find_element(By.XPATH, Xpath_List[0]).click()
+        #time.sleep(1)
+        if (ignore_Eng.get()):
+            browser.find_element(By.XPATH, Xpath_List[0]).send_keys(f"{eng_keyword}")
+        else:
+            browser.find_element(By.XPATH, Xpath_List[0]).send_keys(f"{keyword}")
+            #time.sleep(1)
+        browser.find_element(By.XPATH, Xpath_List[0]).send_keys(Keys.ENTER)  # 엔터 입력
+
+        for i in range(1, 3):
+            browser.execute_script(f'window.open("{S.Now_Url[i]}");')
+            time.sleep(1)
+            browser.switch_to.window(browser.window_handles[-1])  # 새로 연 탭으로 이동
+            browser.find_element(By.XPATH, Xpath_List[i]).click()
+            time.sleep(1)
+            if (ignore_Eng.get()):
+                browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"{eng_keyword}")
+            else:
+                browser.find_element(By.XPATH, Xpath_List[i]).send_keys(f"{keyword}")
+                #time.sleep(1)
+            browser.find_element(By.XPATH, Xpath_List[i + 3]).send_keys(Keys.ENTER)  # 엔터 입력
+            #time.sleep(1)
+
+        S.Now_Browser.append(browser)
+    # 창일 경우
+    else:
+        browser = [webdriver.Chrome for x in range(3)]
+        state = [0, 0, 600, 600, 400, 0, 0, 400]
+        for i in range(3):
+            browser[i] = webdriver.Chrome()
+            browser[i].set_window_position(state[i], state[i + 4])
+            browser[i].set_window_size(600, 400)
+            browser[i].get(S.Now_Url[i])
+            time.sleep(1)
+            browser[i].find_element(By.XPATH, Xpath_List[i]).click()  # 엔터 입력
+            time.sleep(1)
+            if (ignore_Eng.get()):
+                browser[i].find_element(By.XPATH, Xpath_List[i]).send_keys(f"{eng_keyword}")
+            else:
+                browser[i].find_element(By.XPATH, Xpath_List[i]).send_keys(f"{keyword}")
+            time.sleep(1)
+            browser[i].find_element(By.XPATH, Xpath_List[i + 3]).send_keys(Keys.ENTER)  # 엔터 입력
+            time.sleep(1)
+            S.Now_Browser.append(browser[i])
 
 
     pass

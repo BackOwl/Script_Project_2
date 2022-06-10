@@ -169,11 +169,19 @@ def open_file(event =None):
 def Change_Url(event =None):
     f = open('Server_info.txt', 'rt', encoding='UTF8')
     Read_list = []
+    new_number =[]
     for i in f.readlines():
         Read_list.append(i.replace("\n", ""))
 
-    for i in range(1,4):
-        Read_list[i]= str(random.randint(0,10))
+    while True:
+        random_number = random.randint(0,10)
+        if random_number not in new_number and (random_number%6) not in new_number:
+            new_number.append(random_number)
+        if len(new_number)==4:
+            break
+
+    for i in range(0,3 ):
+        Read_list[i+1] =str(new_number[i])
 
     with open('Server_info.txt', 'w', encoding='UTF8') as f:
         f.write('\n'.join(Read_list))
