@@ -16,12 +16,26 @@ import keyboard
 import pyperclip
 #import pyautogui
 import winsound
+import datetime
+import platform
 import Server as S
 
 Search_Entry= ''
 ignore_Eng = ''
 ignore_Non = ''
 ignore_Tab = ''
+
+time_label =''
+date_label =''
+get_alarm_time_entry =''
+alarm_status_label =''
+set_alarm_button =''
+timer_get_entry =''
+timer_label =''
+timer_start =''
+timer_stop =''
+timer_reset =''
+
 def _1_GooGle():
     print('구글구글')
     newWindow = tk.Toplevel()
@@ -90,18 +104,37 @@ def _2_MultiMap():
     Check_Non.place(x=170, y=200)
     Check_Tab.place(x=170, y=220)
 
-
 def _3_TimerAlram():
+    global time_label
+    global date_label
+    global get_alarm_time_entry
+    global alarm_status_label
+    global set_alarm_button
+
     print('알람알람')
     newWindow = tk.Toplevel()
     newWindow.title("Timer_Alram")
-    newWindow.geometry("200x400+1000+200")
+    newWindow.geometry("500x400+1000+200")
     newWindow.resizable(False, False)
 
-    # 버튼
+    # 버튼들
+    tabs_control = ttk.Notebook(newWindow)
+    clock_tab = tk.Frame(tabs_control)
+    alarm_tab = tk.Frame(tabs_control)
+    time_label = tk.Label(newWindow, font='calibri 40 bold', foreground='black')
+    time_label.place(x=110, y=40)
+    date_label = tk.Label(newWindow, font='calibri 40 bold', foreground='black')
+    date_label.place(x=120, y=100)
+    get_alarm_time_entry = tk.Entry(newWindow, font='calibri 15 bold')
+    get_alarm_time_entry.place(x=140, y=200)
 
-
-    pass
+    alarm_instructions_label = tk.Label(newWindow, font='calibri 10 bold',text="시간을 입력하세요 Ex) 01:30 PM\n 01 -> 시(Hour)\n 30 -> 분(Min)\n")
+    alarm_instructions_label.place(x=140, y=240)
+    set_alarm_button = tk.Button(newWindow, text="Set 알람", command=alarm)
+    set_alarm_button.place(x=320, y=200)
+    alarm_status_label = tk.Label(newWindow, font='calibri 15 bold')
+    alarm_status_label.place(x=140, y=280)
+    clock()
 
 def Make_fight_image(img):
     Result_Image =Image.open(S.image)
@@ -329,6 +362,44 @@ def Nonmun_Search():
             browser[i].find_element(By.XPATH, Xpath_List[i+3]).send_keys(Keys.ENTER)  # 엔터 입력
             time.sleep(1)
             S.Now_Browser.append(browser[i])
+def clock():
+    date_time = datetime.datetime.now().strftime("%Y-%d-%m %H:%M:%S/%p")
+    date, time1 = date_time.split()
+    time2, time3 = time1.split('/')
+    hour, minutes, seconds = time2.split(':')
+    if int(hour) > 12 and int(hour) < 24:
+        time = str(int(hour) - 12) + ':' + minutes + ':' + seconds + ' ' + time3
+    else:
+        time = time2 + ' ' + time3
+    time_label.config(text=time)
+    date_label.config(text=date)
+    time_label.after(1000, clock)
+
+def alarm():
+    main_time = datetime.datetime.now().strftime("%H:%M %p")
+    alarm_time = get_alarm_time_entry.get()
+    alarm_time1, alarm_time2 = alarm_time.split(' ')
+    alarm_hour, alarm_minutes = alarm_time1.split(':')
+    main_time1, main_time2 = main_time.split(' ')
+    main_hour1, main_minutes = main_time1.split(':')
+
+    if int(main_hour1) > 12 and int(main_hour1) < 24:
+        main_hour = str(int(main_hour1) - 12)
+    else:
+        main_hour = main_hour1
+    if int(alarm_hour) == int(main_hour) and int(alarm_minutes) == int(main_minutes) and main_time2 == alarm_time2:
+        for i in range(3):
+            alarm_status_label.config(text='시간이 끝났습니다!')
+            winsound.Beep(500, 100)
+        get_alarm_time_entry.config(state='enabled')
+        set_alarm_button.config(state='enabled')
+        get_alarm_time_entry.delete(0, tk.END)
+        alarm_status_label.config(text='')
+    else:
+        alarm_status_label.config(text='알람 시작!')
+        get_alarm_time_entry.config(state='disabled')
+        set_alarm_button.config(state='disabled')
+    alarm_status_label.after(1000, alarm)
 
 def Down_Randomimg():
     # 이미지 랜덤추출 함수도 정의해야함.
