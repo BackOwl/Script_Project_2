@@ -39,7 +39,7 @@ def Get_Keyword(event=None):
     # 영어로 변환. => 영어 구분 부분 만들어야함.
     browser = webdriver.Chrome()
     browser.get(f'https://papago.naver.com/?sk=ko&tk=en&st={keyword}')
-    time.sleep(0.1)
+    time.sleep(0.5)
     eng_keyword = browser.find_element(By.CSS_SELECTOR, "div#txtTarget").text
 
     # 띄어쓰기 변환
@@ -48,7 +48,7 @@ def Get_Keyword(event=None):
     print(keyword,"-> ",eng_keyword)
     browser.close()
 
-    Normal_Search()
+    #Normal_Search()
 
 
 # 버튼
