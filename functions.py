@@ -90,6 +90,7 @@ def _2_MultiMap():
     Check_Eng = tk.Checkbutton(newWindow,text='영어 Search',bg ='#2e6797', variable=ignore_Eng)
     Check_Non = tk.Checkbutton(newWindow,text='논문 Search',bg ='#2e6797',variable=ignore_Non)
     Check_Tab = tk.Checkbutton(newWindow,text='탭 활성 검색',bg ='#2e6797', variable=ignore_Tab)
+    Ex_Button = tk.Button(newWindow, command=Web_Stop, bg='#2e6797', fg='#ffffff', text="창 종료")
     # ignore_Eng.get() 값가져오기, set(1) 체크하기.
 
     Search_Entry = tk.Entry(newWindow,width=30)
@@ -108,6 +109,7 @@ def _2_MultiMap():
     Check_Eng.place(x=160, y=190)
     Check_Non.place(x=160, y=210)
     Check_Tab.place(x=160, y=230)
+    Ex_Button.place(x=300, y=230)
 
 def _3_TimerAlram():
     global time_label
@@ -256,6 +258,7 @@ def Normal_Search():
     # 숫자로 정해진 주소번호 4개를 0-5 한글, 6-10영어 11-14논문 Read_list에서 꺼내온다.
     # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
     # 논문 체크일 때
+    S.Now_Url.clear()
     if (ignore_Non.get()):
         for i in range(3):
             S.Now_Url.append(Web_list[11 +i])
@@ -430,9 +433,19 @@ def alarm(event =None):
         set_alarm_button.config(state='disabled')
     alarm_status_label.after(1000, alarm)
 
-def Down_Randomimg():
-    # 이미지 랜덤추출 함수도 정의해야함.
-    pass
+def Web_Stop(event=None):
+    if not len(S.Now_Browser) :
+        messagebox.showinfo(title="no page", message="아무것도 없습니다.\n (이건 검색 버튼이 아님)")
+    else:
+        for i in S.Now_Browser:
+            S.Now_Browser.pop()
+            if len(i.window_handles) > 2:
+                for e in range(len(i.window_handles)):
+                    i.switch_to.window(i.window_handles[0])
+                    i.close()
+            else: i.quit()
+
+
 def Copy_Url():
     # #5 STRING 강의파일 참고하여 클립보드에 출처를 복사할 수 있도록해야함.
     all =[]

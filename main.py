@@ -6,7 +6,10 @@ import Server as S
 import Functions as F
 
 def Stop(event =None):
+    for i in S.Now_Browser:
+        i.quit()
     window.quit()
+
 Command_List = []
 
 
@@ -46,6 +49,7 @@ menu.add_cascade(label='Copy', menu = menu_copy )
 window.config(menu=menu)
 # 키 설정
 window.bind("<Escape>", Stop)
+window.bind("<Control-q>",F.Web_Stop)
 window.bind("<Control-o>", F.open_file)
 window.bind("<Control-u>", F.Change_Url)
 
