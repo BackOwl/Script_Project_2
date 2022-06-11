@@ -18,7 +18,13 @@ window.title("Script_2 Program")
 window.geometry("400x300+500+200")
 window.resizable(False, False)
 window['bg'] = '#6a907f'
-
+def change(event =None):
+    global tk_Image
+    global tk_image
+    tk_image = F.Make_fight_image(S.Read_list[5])
+    tk_Image.config(image=tk_image)
+    window.mainloop()
+    print("클릭")
 
 # 버튼
 button1 = Button(window,text=" Google_Help ", command=F._1_GooGle, takefocus=False )
@@ -31,8 +37,9 @@ button3.place(x=300, y=130)
 
 # 사진 출력
 tk_image = F.Make_fight_image(S.image)
-Label(window, image=tk_image).pack(side=LEFT)
-
+tk_Image =Label(window, image=tk_image)
+tk_Image.bind("<Double-Button-1>",change)
+tk_Image.pack(side=LEFT)
 # 메뉴
 menu = Menu()
 menu_file = Menu(menu, tearoff=False)  # True일경우 메뉴분리

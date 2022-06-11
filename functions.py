@@ -27,6 +27,7 @@ ignore_Eng = ''
 ignore_Non = ''
 ignore_Tab = ''
 
+
 time_label =''
 date_label =''
 get_alarm_time_entry =''
@@ -42,7 +43,7 @@ def _1_GooGle():
     print('구글구글')
     newWindow = tk.Toplevel()
     newWindow.title("Search_Google")
-    newWindow.geometry("200x350+1100+100")
+    newWindow.geometry("200x350+900+100")
     newWindow.resizable(False, False)
     newWindow['bg'] = '#b2515b'
     newWindow.attributes("-topmost", True)
@@ -50,9 +51,10 @@ def _1_GooGle():
     PL_Button =tk.Button(newWindow, command=typo_PL,bg ='#2e6797',fg ='#ffffff', text="      +      ")
     MN_Button =tk.Button(newWindow, command=typo_MN, bg ='#2e6797',fg ='#ffffff',text='      -      ')
     WD_Button =tk.Button(newWindow, command=typo_WD, bg ='#2e6797',fg ='#ffffff',text='    "   "    ')
+    XX_Button =tk.Button(newWindow, command=typo_XX, bg ='#2e6797',fg ='#ffffff',text='  around(x) ')
     Explain_name = tk.Label(newWindow, bg ='#2e6797',fg ='#ffffff',text="- Explain -")
     Explain_main = ScrolledText(newWindow,bg ='#b2515b',fg ='#ffffff',width= 20, height=15,font=('NanumGothic',10))
-    Explain_main.insert(tk.END,"-------음?--------------------" ) #설명문 적을 것.
+    Explain_main.insert(tk.END,"---------------------------\n + : 필수 검색어 앞에 사용합니다. \n\n - : 필수 제외 검색어 앞에 사용합니다. \n\n \" \" : 필수 포함 문장(어절)에 사용합니다. \n\n around(x) : X 값 만큼의 단어 수 이내에 두 단어가 존재하는 문서를 찾을 때 사용합니다.") #설명문 적을 것.
     Explain_main.configure(state='disabled')
 
     # 구글 열기
@@ -65,6 +67,7 @@ def _1_GooGle():
     PL_Button.pack()
     MN_Button.pack()
     WD_Button.pack()
+    XX_Button.pack()
     Explain_name.pack()
     Explain_main.pack()
 
@@ -196,8 +199,8 @@ def Change_Url(event =None):
 
 def typo_PL():
     # 2. c+p에 이 함수 연결하기(원격함수?)
-    Now_Honkey = typo_PL
-    pyperclip.copy('PLPL')
+    #keyboard.add_hotkey('control+d',typo_PL)
+    pyperclip.copy('+')
 
     #1. search 값 받아와서 + 넣고 다시 검색로딩하게
     xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
@@ -212,8 +215,8 @@ def typo_PL():
     print("나 작동중이에요")
 
 def typo_MN():
-    Now_Honkey =typo_MN
-    pyperclip.copy('MONO')
+    #keyboard.add_hotkey('control+d',typo_MN)
+    pyperclip.copy('-')
     xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
     time.sleep(0.1)  ## 0.5초
     element = S.Now_Browser[0].find_element_by_name('q').send_keys("-")
@@ -225,12 +228,25 @@ def typo_MN():
     S.Now_Browser[0].find_element(By.XPATH, xpath).click()
 
 def typo_WD():
-    Now_Honkey = typo_WD
-    pyperclip.copy('WDWD')
+    #keyboard.add_hotkey('control+d',typo_WD)
+    pyperclip.copy('\" \"')
 
     xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
     time.sleep(0.1)  ## 0.5초
     element = S.Now_Browser[0].find_element_by_name('q').send_keys("\" \"")
+    # S.Now_Browser[0].find_element(By.XPATH, xpath).send_keys(Keys.ENTER)  # 엔터 입력
+    time.sleep(0.1)
+
+    # pyautogui.moveTo(200, 400)
+    # pyautogui.click()
+    S.Now_Browser[0].find_element(By.XPATH, xpath).click()
+def typo_XX():
+    #keyboard.add_hotkey('control+d',typo_XX)
+    pyperclip.copy('around(x)')
+
+    xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
+    time.sleep(0.1)  ## 0.5초
+    element = S.Now_Browser[0].find_element_by_name('q').send_keys("around(x)")
     # S.Now_Browser[0].find_element(By.XPATH, xpath).send_keys(Keys.ENTER)  # 엔터 입력
     time.sleep(0.1)
 
@@ -259,6 +275,7 @@ def Normal_Search():
     # Web_info에서 그 숫자 번째 줄 주소를 가져온다. 논문 뒤에서 두개
     # 논문 체크일 때
     S.Now_Url.clear()
+
     if (ignore_Non.get()):
         for i in range(3):
             S.Now_Url.append(Web_list[11 +i])
@@ -273,6 +290,7 @@ def Normal_Search():
             for i in range(4):
                 S.Now_Url.append(Web_list[int(Read_list[i + 1]) % 6])
     # 가져온 주소를 검색키워드 keyword로 치환한다.
+
     for i in range(4):
         if (ignore_Eng.get()):
             if (int((Read_list[i + 1])) > 5):
@@ -444,6 +462,7 @@ def Web_Stop(event=None):
                     i.switch_to.window(i.window_handles[0])
                     i.close()
             else: i.quit()
+            time.sleep(0.5)
 
 
 def Copy_Url():
@@ -462,7 +481,7 @@ def Copy_Url():
     pyperclip.copy(all_str)
     print(all_str)
 
-Now_Honkey=typo_PL
-keyboard.add_hotkey('control+d',Now_Honkey)
+
+
 
 # https://yobbicorgi.tistory.com/30
