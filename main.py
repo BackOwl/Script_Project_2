@@ -34,11 +34,14 @@ Label(window, image=tk_image).pack(side=LEFT)
 menu = Menu()
 menu_file = Menu(menu, tearoff=False)  # True일경우 메뉴분리
 menu_url = Menu(menu, tearoff=False)
+menu_copy = Menu(menu, tearoff=False)
 menu_file.add_command(label='ChangeImage', command=F.open_file, accelerator='Ctrl+o')
 menu_url.add_command(label='ChangeUrl', command=F.Change_Url, accelerator='Ctrl+U')
+menu_copy.add_command(label='Copy-Url', command=F.Copy_Url, accelerator='Ctrl+C')
 
 menu.add_cascade(label='File', menu = menu_file )
 menu.add_cascade(label='Url', menu = menu_url )
+menu.add_cascade(label='Copy', menu = menu_copy )
 
 window.config(menu=menu)
 # 키 설정

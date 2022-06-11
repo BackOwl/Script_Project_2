@@ -45,6 +45,7 @@ def _1_GooGle():
     newWindow.geometry("200x350+1100+100")
     newWindow.resizable(False, False)
     newWindow['bg'] = '#b2515b'
+    newWindow.attributes("-topmost", True)
     # 버튼
     PL_Button =tk.Button(newWindow, command=typo_PL,bg ='#2e6797',fg ='#ffffff', text="      +      ")
     MN_Button =tk.Button(newWindow, command=typo_MN, bg ='#2e6797',fg ='#ffffff',text='      -      ')
@@ -76,7 +77,7 @@ def _2_MultiMap():
     print('맵맵')
     newWindow = tk.Toplevel()
     newWindow.title("Search_Multi")
-    newWindow.geometry("400x300+550+250")
+    newWindow.geometry("400x300+850+250")
     newWindow.resizable(False, False)
     newWindow['bg'] = '#b2515b'
 
@@ -118,27 +119,29 @@ def _3_TimerAlram():
     print('알람알람')
     newWindow = tk.Toplevel()
     newWindow.title("Timer_Alram")
-    newWindow.geometry("500x400+1000+200")
+    newWindow.geometry("400x300+800+200")
     newWindow.resizable(False, False)
     newWindow['bg'] = '#b2515b'
-
+    #newWindow.attributes("-topmost", True)
     # 버튼들
     tabs_control = ttk.Notebook(newWindow)
     clock_tab = tk.Frame(tabs_control)
     alarm_tab = tk.Frame(tabs_control)
     time_label = tk.Label(newWindow, font='calibri 40 bold',bg ='#b2515b',foreground='#ffffff')
-    time_label.place(x=110, y=40)
+    time_label.place(x=60, y=30)
     date_label = tk.Label(newWindow, font='calibri 40 bold',bg ='#b2515b', foreground='#ffffff')
-    date_label.place(x=120, y=100)
+    date_label.place(x=70, y=90)
     get_alarm_time_entry = tk.Entry(newWindow, font='calibri 15 bold')
-    get_alarm_time_entry.place(x=140, y=200)
+    get_alarm_time_entry.place(x=90, y=160)
 
     alarm_instructions_label = tk.Label(newWindow, font='calibri 10 bold',bg ='#b2515b',foreground='#ffffff',text="시간을 입력하세요 Ex) 01:30 PM\n 01 -> 시(Hour)\n 30 -> 분(Min)\n")
-    alarm_instructions_label.place(x=140, y=240)
+    alarm_instructions_label.place(x=90, y=200)
     set_alarm_button = tk.Button(newWindow,bg ='#2e6797',fg ='#ffffff', text="Set 알람", command=alarm)
-    set_alarm_button.place(x=350, y=203)
-    alarm_status_label = tk.Label(newWindow, font='calibri 15 bold')
-    alarm_status_label.place(x=140, y=280)
+    set_alarm_button.place(x=300, y=163)
+    alarm_status_label = tk.Label(newWindow,font='calibri 13 bold',bg ='#2e6797', foreground='#ffffff')
+    alarm_status_label.place(x=80, y=250)
+
+    get_alarm_time_entry.bind('<Return>', alarm)
     clock()
 
 def Make_fight_image(img):
@@ -397,18 +400,22 @@ def clock():
     date_label.config(text=date)
     time_label.after(1000, clock)
 
-def alarm():
+def alarm(event =None):
     main_time = datetime.datetime.now().strftime("%H:%M %p")
     alarm_time = get_alarm_time_entry.get()
+    # 받은 entry로 시, 분 구분하기
+
     alarm_time1, alarm_time2 = alarm_time.split(' ')
     alarm_hour, alarm_minutes = alarm_time1.split(':')
     main_time1, main_time2 = main_time.split(' ')
     main_hour1, main_minutes = main_time1.split(':')
-
+    # 낮, 오후 확인
     if int(main_hour1) > 12 and int(main_hour1) < 24:
         main_hour = str(int(main_hour1) - 12)
     else:
         main_hour = main_hour1
+
+    # 알람 시간이 모두 떨어져서 같아졌을 떄 ( 알람 끝 )
     if int(alarm_hour) == int(main_hour) and int(alarm_minutes) == int(main_minutes) and main_time2 == alarm_time2:
         for i in range(3):
             alarm_status_label.config(text='시간이 끝났습니다!')
@@ -417,9 +424,8 @@ def alarm():
         set_alarm_button.config(state='enabled')
         get_alarm_time_entry.delete(0, tk.END)
         alarm_status_label.config(text='')
-    else:
-        tkinter.messagebox.showerror("알람시작!",f"{alarm_time}에 알람이 울립니다!")
-        alarm_status_label.config(text='알람 시작!')
+    else: # 알람 시작 일 떄
+        alarm_status_label.config(text=f'알람 시작!\n {alarm_time}에 알람이 울립니다!')
         get_alarm_time_entry.config(state='disabled')
         set_alarm_button.config(state='disabled')
     alarm_status_label.after(1000, alarm)
@@ -429,9 +435,21 @@ def Down_Randomimg():
     pass
 def Copy_Url():
     # #5 STRING 강의파일 참고하여 클립보드에 출처를 복사할 수 있도록해야함.
-    pass
+    all =[]
+    all_str =""
+    for i in S.Now_Browser:
+        print(i)
+        if len(i.window_handles) > 2:
+            print(len(i.window_handles))
+            for e in range(len(i.window_handles)):
+                i.switch_to.window(i.window_handles[e])
+                all.append(f'by 글쓴이, 「제-목」, {i.current_url}')
+        else: all.append(f'by 글쓴이, 「제-목」, {i.current_url}')
+    all_str ="\n".join(all)
+    pyperclip.copy(all_str)
+    print(all_str)
 
 Now_Honkey=typo_PL
-keyboard.add_hotkey('control+a',Now_Honkey)
+keyboard.add_hotkey('control+d',Now_Honkey)
 
 # https://yobbicorgi.tistory.com/30
